@@ -52,10 +52,9 @@
             <svg id="fillgauge2" class="vcenter" height="250"></svg>
 			<code class="equation2 vcenter"> - </code>
             <svg id="fillgauge3" class="vcenter"></svg>
-            <p></p>	
+            <p></p>
 			<br>
             <code class="equation">Residuals = <mark>Premiums</mark> - Claims</code>
-			<br>
 			<br>
         </div>
         <div id="row1" class="row" align="center">
@@ -82,13 +81,13 @@
         config1.waveColor = "#00C851";
         config1.textVertPosition = 0.52;
         config1.waveAnimateTime = 5000;
-        config1.waveHeight = 0;
-        config1.waveAnimate = false;
-        config1.waveCount = 2;
+        config1.waveHeight = 0.08;
+        config1.waveAnimate = true;
+        config1.waveCount = 1.5;
         config1.waveOffset = 0.25;
-        config1.textSize = 1.2;
+        config1.textSize = 0.8;
         config1.minValue = 0;
-        config1.maxValue = 150
+        config1.maxValue = 150;
         config1.displayPercent = false;
 
         var config2 = liquidFillGaugeDefaultSettings();
@@ -99,13 +98,13 @@
         //config2.waveColor = "#246D5F";
         config2.textVertPosition = 0.52;
         config2.waveAnimateTime = 5000;
-        config2.waveHeight = 0;
-        config2.waveAnimate = false;
-        config2.waveCount = 2;
+        config2.waveHeight = 0.08;
+        config2.waveAnimate = true;
+        config2.waveCount = 1.5;
         config2.waveOffset = 0.25;
-        config2.textSize = 1.2;
+        config2.textSize = 0.8;
         config2.minValue = 0;
-        config2.maxValue = 150
+        config2.maxValue = 150;
         config2.displayPercent = false;
 
         var config3 = liquidFillGaugeDefaultSettings();
@@ -116,13 +115,13 @@
         config3.waveColor = "#ff4444";
         config3.textVertPosition = 0.52;
         config3.waveAnimateTime = 5000;
-        config3.waveHeight = 0;
-        config3.waveAnimate = false;
-        config3.waveCount = 2;
+        config3.waveHeight = 0.08;
+        config3.waveAnimate = true;
+        config3.waveCount = 1.5;
         config3.waveOffset = 0.25;
-        config3.textSize = 1.2;
+        config3.textSize = 0.8;
         config3.minValue = 0;
-        config3.maxValue = 150
+        config3.maxValue = 150;
         config3.displayPercent = false;
 
         //var gauge1 = loadLiquidFillGauge("fillgauge1", 80, config1);
@@ -220,7 +219,10 @@
                     title: "Residual"
                 }]
             });
-
+			
+			// Hide residual
+			table.column( 7 ).visible( false );
+ 
         }
     </script>
 
@@ -238,27 +240,6 @@
                 //alert("Hi"+JSON.stringify(result[i], null, 4));
                 i++;
             }
-
-            table = $('#example').DataTable({
-                data: result,
-                columns: [{
-                    title: "Record"
-                }, {
-                    title: "Time"
-                }, {
-                    title: "Insurer ID"
-                }, {
-                    title: "Contract ID"
-                }, {
-                    title: "Event"
-                }, {
-                    title: "Disease"
-                }, {
-                    title: "Amount"
-                }, {
-                    title: "Residual"
-                }]
-            });
             var total_premium = 3134000;
             var total_claims = 1604000;
             var total_residual = 1530000;
@@ -286,6 +267,32 @@
             gauge2 = loadLiquidFillGauge("fillgauge2", total_premium / scale, config2);
             gauge3 = loadLiquidFillGauge("fillgauge3", total_claims / scale, config3);
 
+			
+
+            table = $('#example').DataTable({
+                data: result,
+                columns: [{
+                    title: "Record"
+                }, {
+                    title: "Time"
+                }, {
+                    title: "Insurer ID"
+                }, {
+                    title: "Contract ID"
+                }, {
+                    title: "Event"
+                }, {
+                    title: "Disease"
+                }, {
+                    title: "Amount"
+                }, {
+                    title: "Residual"
+                }]
+            });
+			
+			// Hide residual
+			table.column( 7 ).visible( false );
+ 
 
         });
     </script>

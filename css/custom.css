@@ -1,0 +1,72 @@
+.jumbotron {
+
+    padding: 100 px 25 px;
+	padding-left: 2cm;
+}
+
+.container-fluid {
+    padding: 60 px 50 px;
+}
+
+.container {
+    padding: 60 px 50 px;
+	
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+}
+
+.bg-grey {
+    background-color: #f6f6f6;
+}
+
+.liquidFillGaugeText {
+    font-family: Helvetica;
+    font-weight: bold;
+}
+
+.equation {
+    font-size: 20px;
+}
+
+.equation2 {
+	background-color: none;
+	background: none;
+    font-size: 72px;
+}
+
+.equation3 {
+	background-color: none;
+	background: none;
+	color: #0099CC;
+    font-size: 72px;
+}
+
+
+#row1 {
+	
+            /*position: absolute;*/
+            /*top: 65%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);*/
+}
+
+#row2 {
+    
+            /*position: absolute;*/
+            /*top: 125%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);*/
+}
+

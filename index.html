@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <title>Ginosko</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/datatables.min.css">
+	<link rel="stylesheet" href="css/custom.css">
+    <script src="js/jquery-3.1.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/datatables.min.js" language="JavaScript"></script>
+    <script src="js/d3.v3.min.js" language="JavaScript"></script>
+    <script src="js/liquidFillGauge.js" language="JavaScript"></script>
+	
+    <!-- Define data variables -->
+    <script src="data/data-all.js" language="JavaScript"></script>
+    <script src="data/data-cancer.js" language="JavaScript"></script>
+    <script src="data/data-ha.js" language="JavaScript"></script>
+    <script src="data/data-stroke.js" language="JavaScript"></script>
+    <script src="data/data-kidney.js" language="JavaScript"></script>
+    <!-- End define variables -->
+
+</head>
+
+<body>
+    <div class="jumbotron">
+        <h1>Ginosko</h1>
+        <p><em>Open Ledger Insurance</em></p>
+    </div>
+
+	<div class="container text-center">
+
+        <ul class="nav nav-pills text-center">
+            <li role="presentation" data-toggle="tab" class="active" onclick="buttonClicked('All');"><a href="#">All Diseases</a></li>
+            <li role="presentation" data-toggle="tab" onclick="buttonClicked('Cancer');"><a href="#">Cancer</a></li>
+            <li role="presentation" data-toggle="tab" onclick="buttonClicked('HA');"><a href="#">Heart Attack</a></li>
+            <li role="presentation" data-toggle="tab" onclick="buttonClicked('Stroke');"><a href="#">Stroke</a></li>
+            <li role="presentation" data-toggle="tab" onclick="buttonClicked('Kidney');"><a href="#">Kidney Failure</a></li>
+        </ul>
+
+    </div>
+
+	
+    <div class="container text-center ">
+        <div id="test"></div>
+        <div id="row1" class="row" align="center">
+            <svg id="fillgauge1" class="vcenter"></svg>
+			<code class="equation3 vcenter"> = </code>
+            <svg id="fillgauge2" class="vcenter" height="250"></svg>
+			<code class="equation2 vcenter"> - </code>
+            <svg id="fillgauge3" class="vcenter"></svg>
+            <p></p>	
+			<br>
+            <code class="equation">Residuals = <mark>Premiums</mark> - Claims</code>
+			<br>
+			<br>
+        </div>
+        <div id="row1" class="row" align="center">
+        </div>
+
+
+    </div>
+
+    <div class="container">
+        <div id="row2" class="row" align="center">
+            <table id="example" class="display" width="100%"></table>
+        </div>
+    </div>
+	
+
+
+    <script language="JavaScript">
+        var config1 = liquidFillGaugeDefaultSettings();
+        config1.circleThickness = 0.4;
+
+        config1.circleColor = "#00C851";
+        config1.textColor = "#007E33";
+        config1.waveTextColor = "#c5e1a5";
+        config1.waveColor = "#00C851";
+        config1.textVertPosition = 0.52;
+        config1.waveAnimateTime = 5000;
+        config1.waveHeight = 0;
+        config1.waveAnimate = false;
+        config1.waveCount = 2;
+        config1.waveOffset = 0.25;
+        config1.textSize = 1.2;
+        config1.minValue = 0;
+        config1.maxValue = 150
+        config1.displayPercent = false;
+
+        var config2 = liquidFillGaugeDefaultSettings();
+        config2.circleThickness = 0.4;
+        //config2.circleColor = "#6DA398";
+        //config2.textColor = "#0E5144";
+        //config2.waveTextColor = "#6DA398";
+        //config2.waveColor = "#246D5F";
+        config2.textVertPosition = 0.52;
+        config2.waveAnimateTime = 5000;
+        config2.waveHeight = 0;
+        config2.waveAnimate = false;
+        config2.waveCount = 2;
+        config2.waveOffset = 0.25;
+        config2.textSize = 1.2;
+        config2.minValue = 0;
+        config2.maxValue = 150
+        config2.displayPercent = false;
+
+        var config3 = liquidFillGaugeDefaultSettings();
+        config3.circleThickness = 0.4;
+        config3.circleColor = "#ff4444";
+        config3.textColor = "#CC0000";
+        config3.waveTextColor = "#ffcdd2";
+        config3.waveColor = "#ff4444";
+        config3.textVertPosition = 0.52;
+        config3.waveAnimateTime = 5000;
+        config3.waveHeight = 0;
+        config3.waveAnimate = false;
+        config3.waveCount = 2;
+        config3.waveOffset = 0.25;
+        config3.textSize = 1.2;
+        config3.minValue = 0;
+        config3.maxValue = 150
+        config3.displayPercent = false;
+
+        //var gauge1 = loadLiquidFillGauge("fillgauge1", 80, config1);
+        //var gauge2 = loadLiquidFillGauge("fillgauge2", 120, config2);
+        //var gauge3 = loadLiquidFillGauge("fillgauge3", 40, config3);
+        var gauge1;
+        var gauge2;
+        var gauge3;
+        var table;
+
+        function NewValue() {
+            if (Math.random() > .5) {
+                return Math.round(Math.random() * 100);
+            } else {
+                return (Math.random() * 100).toFixed(1);
+            }
+        }
+
+        function buttonClicked(source) {
+            var dataSource;
+            switch (source) {
+                case 'All':
+                    dataSource = dataAll;
+                    break;
+                case 'Cancer':
+                    dataSource = dataCancer;
+                    break;
+                case 'HA':
+                    dataSource = dataHA;
+                    break;
+                case 'Stroke':
+                    dataSource = dataStroke;
+                    break;
+                case 'Kidney':
+                    dataSource = dataKidney;
+                    break;
+                default:
+                    alert("Shit");
+            }
+
+            var i = 0,
+                result = [];
+            while (i < dataSource.length) {
+                result.push([]);
+                for (var key in dataSource[i]) {
+                    result[result.length - 1].push(dataSource[i][key]);
+                }
+                i++;
+            }
+            var total_premium = 0;
+            var total_claims = 0;
+            var total_residual = 0;
+            for (k = 0; k < result.length; k++) {
+                if (result[k][4] == 'Premium') {
+                    total_premium += result[k][6];
+                } else if (result[k][4] == 'Claims') {
+                    total_claims += result[k][6];
+                }
+
+            }
+            total_residual = total_premium - total_claims;
+            //alert(total_premium + " " + total_claims + " " + total_residual);
+            /*
+	if (typeof gauge1 !== 'undefined') {
+    alert("the variable is defined");
+    } else { alert("not defined");}*/
+            var scale = 1000000;
+            //config1.maxValue = total_premium / scale;	
+            //config2.maxValue = total_premium / scale;	
+            //config3.maxValue = total_premium / scale;
+            gauge1.update(total_residual / scale);
+            gauge2.update(total_premium / scale);
+            gauge3.update(total_claims / scale);
+
+
+            table.destroy();
+
+            table = $('#example').DataTable({
+                data: result,
+                columns: [{
+                    title: "Record"
+                }, {
+                    title: "Time"
+                }, {
+                    title: "Insurer ID"
+                }, {
+                    title: "Contract ID"
+                }, {
+                    title: "Event"
+                }, {
+                    title: "Disease"
+                }, {
+                    title: "Amount"
+                }, {
+                    title: "Residual"
+                }]
+            });
+
+        }
+    </script>
+
+    <script>
+        $(document).ready(function() {
+
+            var i = 0,
+                result = [];
+            while (i < dataAll.length) {
+                result.push([]);
+                //alert("Hi"+JSON.stringify(dataall[i], null, 4));
+                for (var key in dataAll[i]) {
+                    result[result.length - 1].push(dataAll[i][key]);
+                }
+                //alert("Hi"+JSON.stringify(result[i], null, 4));
+                i++;
+            }
+
+            table = $('#example').DataTable({
+                data: result,
+                columns: [{
+                    title: "Record"
+                }, {
+                    title: "Time"
+                }, {
+                    title: "Insurer ID"
+                }, {
+                    title: "Contract ID"
+                }, {
+                    title: "Event"
+                }, {
+                    title: "Disease"
+                }, {
+                    title: "Amount"
+                }, {
+                    title: "Residual"
+                }]
+            });
+            var total_premium = 3134000;
+            var total_claims = 1604000;
+            var total_residual = 1530000;
+            total_premium = 0;
+            total_claims = 0;
+            total_residual = 0;
+            for (k = 0; k < result.length; k++) {
+                if (result[k][4] == 'Premium') {
+                    total_premium += result[k][6];
+                    //total_residual += result[k][6];
+                } else if (result[k][4] == 'Claims') {
+                    total_claims += result[k][6];
+                    //total_residual -= result[k][6];
+                }
+
+            }
+            total_residual = total_premium - total_claims;
+            //alert(total_premium + " " + total_claims + " " + total_residual);
+
+            var scale = 1000000;
+            config1.maxValue = total_premium / scale;
+            config2.maxValue = total_premium / scale;
+            config3.maxValue = total_premium / scale;
+            gauge1 = loadLiquidFillGauge("fillgauge1", total_residual / scale, config1);
+            gauge2 = loadLiquidFillGauge("fillgauge2", total_premium / scale, config2);
+            gauge3 = loadLiquidFillGauge("fillgauge3", total_claims / scale, config3);
+
+
+        });
+    </script>
+
+
+
+
+
+</body>
+
+</html>
